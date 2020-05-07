@@ -18,16 +18,17 @@ export class AppComponent
   successMessage: string='';
   executeableJavascript: string='';
 
-  lexicalAnalysis()
+  lexicalAnalysis(code:string)
   {
     
     //At the first step we are splitting string into token and assigning them properties i.e type, location etc.
-    this.output=this.code.split(' ').map(eachToken=>eachToken.trim()).filter(eachTrimmedToken=>eachTrimmedToken.length>0);
+    this.output=code.split(' ').map(eachToken=>eachToken.trim()).filter(eachTrimmedToken=>eachTrimmedToken.length>0);
+    return this.output;
     //Here , we first split our input string by spaces and trimmed whitespace from each splitted item. 
     //Then we filtered only those tokens whose length is greater than 0 i.e. no whitespace is allowed
   }
 
-  parser(lexData:any[])
+  parser(lexData:any[]):any
   {
     //Syntax analysis and construction of AST (Abstract Syntax Tree)
     //We will loop throught each token and check for operations and operands
@@ -38,15 +39,16 @@ export class AppComponent
       if(this.parseTree.length>0)
       {
         this.successMessage='Parsing Successful';
+        return this.parseTree;
       }
-      return;
+      return [];
     }
     let token=lexData[0];
     if(isNaN(token) && this.operations[String(token)]==undefined)
       {
         //Invalid operation
         this.errorMessage="Invalid Operation";
-        return;
+        return [];
       }
       else if(isNaN(token) && this.operations[String(token)]!=undefined)
       {
@@ -60,7 +62,7 @@ export class AppComponent
           if(operation['expression'].length>2)
           {
             this.errorMessage='Invalid Syntax. Only 2 values after operation are allowed';
-            return;
+            return[];
           }
           lexData.shift();
         }
@@ -75,19 +77,21 @@ export class AppComponent
         return operation;
 
       }
-
     console.log('Tokens=',lexData,'Parse Tree=',this.parseTree);
+    return [];
   }
 
   transpileData(parsedData:any[])
   {
     console.log(parsedData);
+    this.successMessage='';
     if(parsedData.length==0)
     {
       console.log('Transpiled Data',this.transpiledCode);
       if(this.transpileData.length>0)
       {
-        this.successMessage='Generated Code='+this.transpiledCode;
+        this.successMessage='Code Generated. Execute Now.';
+        return this.transpiledCode+'0';
       }
       return;
     }
@@ -100,7 +104,7 @@ export class AppComponent
         this.errorMessage+='Syntax error. Invalid number of arguments!';
         return;
       }
-      this.transpiledCode+=`${this.transpileData(node.expression)+this.operations[node.value]+this.transpileData(node.expression)+' '}`;
+      this.transpiledCode+=`${this.transpileData(node.expression)+this.operations[node.value]+this.transpileData(node.expression)+'+'}`;
       parsedData.shift();
       this.transpileData(parsedData);
     }
@@ -116,7 +120,7 @@ export class AppComponent
     }
   }
 
-  execute(transpiledCode)
+  generateJavascript(transpiledCode)
   {
     if(transpiledCode.length==0)
     {
@@ -134,10 +138,16 @@ export class AppComponent
     }
   }
 
+  execute()
+  {
+    this.generateJavascript(this.transpileData(this.parser(this.lexicalAnalysis(this.code))));
+  }
+
   clearData()
   {
     this.code='';
     this.errorMessage='';
+    this.successMessage='';
     this.output=[];
     this.parseTree=[];
     this.transpiledCode='';
