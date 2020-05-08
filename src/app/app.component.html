@@ -43,10 +43,34 @@
 
   <!-- Next Steps -->
   <h2>A Dashing Compiler</h2>
-  <h4>Get started with simple syntex</h4>
-  <h4>Please Execute Sequentially</h4>
-  <p>Supported operations: <b>add,sub,mul,div</b></p>
-  <p>Example: add 10 20 sub 30 40</p>
+  <h4>Get creative and write a story that executes</h4>
+  <h5>Use length of words to make numbers</h5>
+  <table>
+    <thead>
+      <th>Syntax</th>
+      <th>Operation</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>admire</td>
+        <td>Addition</td>
+      </tr>
+      <tr>
+        <td>molester</td>
+        <td>Multiply</td>
+      </tr>
+      <tr>
+        <td>dancing</td>
+        <td>Divide</td>
+      </tr>
+      <tr>
+        <td>eliminate</td>
+        <td>Substract</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h5>Example: admire Adam Eve eliminate Osama Hitler</h5>
   <button class="btn btn-primary m-2" (click)="clearData()">Clear</button>
 
     <!-- Terminal -->
@@ -58,7 +82,6 @@
       <pre *ngSwitchCase="'build'">ng build --prod</pre> -->
       <textarea autofocus placeholder="Type here" [(ngModel)]="code"></textarea>
   </div>
-  <mat-card style="margin:5px;"><p >{{output==undefined?'Output will go here':output}}</p></mat-card>
   <mat-card  *ngIf="errorMessage!=undefined && errorMessage!=''"><p class='text-danger mt-2 error'>{{errorMessage}}</p></mat-card>
   <mat-card  *ngIf="errorMessage=='' && successMessage!=undefined && successMessage!=''"><p #result class='text-success mt-2 success'>{{successMessage}}</p></mat-card>
   <input type="hidden" #selection>
@@ -81,7 +104,7 @@
       <span>Transpile</span>
     </div>
 
-    <div class="mCard mCard-small p-3" (click)="execute(transpiledCode)" tabindex="0">
+    <div class="mCard mCard-small p-3" (click)="execute()" tabindex="0">
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
 
       <span>Execute</span>
@@ -91,8 +114,8 @@
 
   <!-- Footer -->
   <footer>
-      Love Angular?&nbsp;
-      <a href="https://github.com/angular/angular" target="_blank" rel="noopener"> Give our repo a star.
+      Liked the idea?&nbsp;
+      <a href="https://github.com/Pankaj-Sati/DashingCompiler" target="_blank" rel="noopener"> Give my repo a star.
         <div class="github-star-badge">
             <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           Star

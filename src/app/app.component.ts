@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 export class AppComponent 
 {
   code:string='';
-  operations={add:'+',mul:'*',div:'/',sub:'-'} ; // All Possible operations supported by our compiler
+  operations={admire:'+',molester:'*',dancing:'/',eliminate:'-'} ; // All Possible operations supported by our compiler
   output:any[]=[];
   parseTree:any[]=[];
   transpiledCode:string='';
@@ -20,12 +20,32 @@ export class AppComponent
 
   lexicalAnalysis(code:string)
   {
-    
+    //console.log = function() {}
     //At the first step we are splitting string into token and assigning them properties i.e type, location etc.
     this.output=code.split(' ').map(eachToken=>eachToken.trim()).filter(eachTrimmedToken=>eachTrimmedToken.length>0);
-    return this.output;
+    
+    return this.preProcess(this.output);
     //Here , we first split our input string by spaces and trimmed whitespace from each splitted item. 
     //Then we filtered only those tokens whose length is greater than 0 i.e. no whitespace is allowed
+  }
+  
+
+  preProcess(lexcode:any[])
+  {
+    lexcode.forEach((token,index) => 
+    {
+      if(this.operations[String(token)]==undefined)
+      {
+        
+        token=String(token).length;
+      }  
+      console.log('Token value',token);
+      lexcode[index]=token;
+    });
+    console.log('Preprocessed Data=',lexcode);
+    this.output=lexcode;
+    this.successMessage='Lexical analysis executed successfully';
+    return lexcode;
   }
 
   parser(lexData:any[]):any
@@ -91,7 +111,8 @@ export class AppComponent
       if(this.transpileData.length>0)
       {
         this.successMessage='Code Generated. Execute Now.';
-        return this.transpiledCode+'0';
+        this.transpiledCode=this.transpiledCode+'0';
+        return this.transpiledCode;
       }
       return;
     }
@@ -140,12 +161,15 @@ export class AppComponent
 
   execute()
   {
-    this.generateJavascript(this.transpileData(this.parser(this.lexicalAnalysis(this.code))));
+    this.clearData();
+    this.lexicalAnalysis(this.code);
+    this.parser(this.output);
+    this.transpileData(this.parseTree);
+    this.generateJavascript(this.transpiledCode);
   }
 
   clearData()
   {
-    this.code='';
     this.errorMessage='';
     this.successMessage='';
     this.output=[];
